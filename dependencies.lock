@@ -2,7 +2,7 @@ dependencies:
   ethernet_init:
     component_hash: null
     source:
-      path: /home/mark/sshfsmounts/private/Electronics/esp32/esp-idf/examples/ethernet/basic/components/ethernet_init
+      path: /home/mark/compile/esp32/esp-idf/examples/ethernet/basic/components/ethernet_init
       type: local
     version: '*'
   idf:
@@ -10,6 +10,6 @@ dependencies:
     source:
       type: idf
     version: 5.3.0
-manifest_hash: c939eec3a4d392b3be21c85545f86f14bf85af8b6a064cdd787274dea2712c0f
+manifest_hash: 9e0dc61fcdc21ea5b2c4ea28256ea7259082f473dbe1cbd0988f77ae595bd4fc
 target: esp32
 version: 1.0.0

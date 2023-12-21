@@ -24,6 +24,25 @@ You need:
 git clone https://github.com/moriartynz/esp32-wap.git
 ```
 
+### Editing `sdkconfig`
+
+- The `sdkconfig` file in the root directory of the project can be edited to customise a number of things. When changes are made, the project will need to be re-built and flashed.
+
+WiFi Access Point:
+
+```
+CONFIG_EXAMPLE_BR_WIFI_SSID="wt32-eth01"
+CONFIG_EXAMPLE_BR_WIFI_PASSWORD="mybridgepassword"
+CONFIG_EXAMPLE_BR_WIFI_CHANNEL=1
+CONFIG_EXAMPLE_BR_MAX_STA_CONN=10
+```
+
+You can edit these manually in the file or use the following command after using the `export.sh` command in the next heading:
+
+```sh
+idf.py menuconfig
+```
+
 ### `ESP-IDF` building
 
 From the `esp32-wap` directory, issue the following commands/do these things:
@@ -33,7 +52,7 @@ From the `esp32-wap` directory, issue the following commands/do these things:
 ```
 
 > replace `../esp32/esp-idf` with your actual location of the `esp-idf` installation on your computer.
-> 
+>
 > My setup is in Linux. If you are running MS-Windows or some other operating system, you can use the appropriate export script for your operating system.
 
 ```sh
@@ -99,7 +118,7 @@ idf.py monitor
 ```
 
 + This will bring up a scroll of a series of reboot messages, including the following (in red):
-  
+
   ```log
   E (673) eth_phy_802_3: esp_eth_phy_802_3_pwrctl(244): power up timeout
   E (673) eth_phy_802_3: esp_eth_phy_802_3_basic_phy_init(413): power control failed
@@ -112,9 +131,45 @@ idf.py monitor
 
 ## Testing
 
+### Power Consumption
+
+All running off the 5V USB power supply. Baseline current is 15 mA for the USB power meter + serial module.
+
+Idle current = 220 ­– 240 mA (incl. everything) = 205 – 225 mA for the `WT32-ETH0` module alone. This is a power-hungry little beast, especially given it's not actually doing anything!
+
 ### Basic connectivity testing
 
+For testing, this was the setup:
+```mermaid
+flowchart LR
+    L[fas:fa-laptop]
+    E[WT32-ETH01]
+    L -- fas:fa-wifi --- E
+    E -- fas:fa-ethernet --- N[fas:fa-network-wired]
+    N -- fas:fa-server --- fas:fa-globe
+```
 
+Success!
+![WiFiConnected](docs/WiFiComputerConnection.png)
+
+### Benchmark results
+
+I did a [speed test](https://speedtest.net) from the computer over the WT32-ETH01 WiFi Access Point (about 10 cm away).
+
+The results: about **8 Mbps download** and **18 Mbps upload**. Power consumption was pretty much the same as at idle.
+
+~[speedtest](docs/SpeedTest.png)
+
+A fair number of transmit errors were encountered:
+
+```log
+E (1665543) esp.emac: emac_esp32_transmit(233): insufficient TX buffer size
+E (1665603) esp.emac: emac_esp32_transmit(233): insufficient TX buffer size
+E (1665733) esp.emac: emac_esp32_transmit(233): insufficient TX buffer size
+E (1665823) esp.emac: emac_esp32_transmit(233): insufficient TX buffer size
+E (1666353) esp.emac: emac_esp32_transmit(233): insufficient TX buffer size
+E (1666613) esp.emac: emac_esp32_transmit(233): insufficient TX buffer size
+```
 
 ## Notes
 
@@ -123,7 +178,7 @@ idf.py monitor
 ## Why, just why would you do this little project?
 
 - A bit of fun. I wanted to benchmark the device to see what it could do.
-- If your Wireless AP dies and you have no other options available, you could give this a go as a temporary stand-in, I suppose. It's not quite as bad as dial-up, but it's certainly not going to win you any bandwidth medals.
+- If your Wireless AP dies and you have no other options available, you could give this a go as a temporary stand-in, I suppose. It's not quite as bad as dial-up, but it's certainly not going to win you any bandwidth medals or allow hundreds of devices to connect.
 
 ## Gotchas
 
@@ -141,8 +196,6 @@ idf.py monitor
 - When you use `idf.py monitor`, you should see a lot of reboots and messages about `eth_phy_802_3: esp_eth_phy_802_3_pwrctl(244): power up timeout` (see above) with the programmer connected.
 - To fix this issue, with the `WT32-ETH0` on, continuously rebooting and the monitor still running, unplug the `DTR` line from `GPIO0`.
 - The device will reboot one more time and should then just work. The monitor function also continues to work too.
-
-## Benchmarking
 
 ## A successful boot monitor log
 
@@ -191,7 +244,7 @@ I (459) cpu_start: Compile time:     Dec 21 2023 19:19:53
 I (465) cpu_start: ELF file SHA256:  1e6bcb428...
 I (471) cpu_start: ESP-IDF:          v5.3-dev-582-gab03c2ea13
 I (477) cpu_start: Min chip rev:     v0.0
-I (482) cpu_start: Max chip rev:     v3.99 
+I (482) cpu_start: Max chip rev:     v3.99
 I (487) cpu_start: Chip rev:         v1.1
 I (492) heap_init: Initializing. RAM available for dynamic allocation:
 I (499) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM
@@ -241,5 +294,5 @@ Type 'help' to get the list of commands.
 Use UP/DOWN arrows to navigate through command history.
 Press TAB when typing command name to auto-complete.
 I (5103) main_task: Returned from app_main()
-bridge> 
+bridge>
 ```

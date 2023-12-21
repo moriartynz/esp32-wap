@@ -140,14 +140,7 @@ Idle current = 220 ­– 240 mA (incl. everything) = 205 – 225 mA for the `WT3
 ### Basic connectivity testing
 
 For testing, this was the setup:
-```mermaid
-flowchart LR
-    L[fas:fa-laptop]
-    E[WT32-ETH01]
-    L -- fas:fa-wifi --- E
-    E -- fas:fa-ethernet --- N[fas:fa-network-wired]
-    N -- fas:fa-server --- fas:fa-globe
-```
+![Testing Connection](docs/TestingConection.png)
 
 Success!
 ![WiFiConnected](docs/WiFiComputerConnection.png)
@@ -158,7 +151,7 @@ I did a [speed test](https://speedtest.net) from the computer over the WT32-ETH0
 
 The results: about **8 Mbps download** and **18 Mbps upload**. Power consumption was pretty much the same as at idle.
 
-~[speedtest](docs/SpeedTest.png)
+![speedtest](docs/SpeedTest.png)
 
 A fair number of transmit errors were encountered:
 

@@ -140,7 +140,7 @@ Idle current = 220 ­– 240 mA (incl. everything) = 205 – 225 mA for the `WT3
 ### Basic connectivity testing
 
 For testing, this was the setup:
-![Testing Connection](docs/TestingConection.png)
+![Testing Connection](docs/TestingConnection.png)
 
 Success!
 ![WiFiConnected](docs/WiFiComputerConnection.png)
